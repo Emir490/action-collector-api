@@ -4,7 +4,9 @@
   "description": "API Rest for store dataset in MongoDB",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/app.ts"
+    "dev": "nodemon ./src/app.ts",
+    "build": "tsc",
+    "start": "node ./dist/app.js"
   },
   "author": "Eduardo Emir Medrano",
   "license": "ISC",
