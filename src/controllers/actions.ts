@@ -17,16 +17,17 @@ const postAction = async (req: Request, res: Response) => {
     try {
         const file = req.file;
         req.body.keypoints = JSON.parse(req.body.keypoints);
-        
+
         if (!file) {
             return res.status(400).json({ message: "Error uploading file" });
         }
 
         const responseAction = await addAction(req.body, file.buffer);
-
-        res.send(responseAction);
+        
+        res.status(responseAction.status);
+        res.send(responseAction.content);
     } catch (error) {
-        handleHttp(res, "ERROR_POST_ACTION");
+        handleHttp(res, "ERROR_POST_ACTION", error);
     }
 }
 

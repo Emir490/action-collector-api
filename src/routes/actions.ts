@@ -7,6 +7,6 @@ const upload = multer()
 
 router.get('/:action', index);
 router.post('/', upload.single('file'), postAction);
-router.delete('/:id', deleteAction);
+router.patch('/:id', deleteAction);
 
 export { router }

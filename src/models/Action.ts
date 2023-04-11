@@ -9,7 +9,8 @@ export const ActionSchema = new Schema<Action>(
         },
         action: {
             type: String,
-            required: true
+            required: true,
+            index: true
         },
         sequence: {
             type: String,
@@ -19,10 +20,34 @@ export const ActionSchema = new Schema<Action>(
             type: String,
             required: true
         },
-        keypoints: {
-            type: [[Number]],
-            required: true
-        }
+        isArchived: {
+            type: Boolean,
+            default: false
+        },
+        keypoints: [
+            {
+                pose: {
+                    type: [Number],
+                    required: true,
+                    length: 132
+                },
+                face: {
+                    type: [Number],
+                    required: true,
+                    length: 1404
+                },
+                rightHand: {
+                    type: [Number],
+                    required: true,
+                    length: 63
+                },
+                leftHand: {
+                    type: [Number],
+                    required: true,
+                    length: 63
+                }
+            }
+        ]
     },
     {
         versionKey: false,
