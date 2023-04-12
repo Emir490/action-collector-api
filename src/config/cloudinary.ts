@@ -13,7 +13,7 @@ interface Video {
 
 export const uploadVideo = async (fileBuffer: Buffer, name: string): Promise<Video> => {
     try {
-        const result = await cloudinary.v2.uploader.upload(`data:video/mp4;base64,${fileBuffer.toString('base64')}`, { resource_type: 'video', format: 'mp4', public_id: name });
+        const result = await cloudinary.v2.uploader.upload(`data:video/mp4;base64,${fileBuffer.toString('base64')}`, { resource_type: 'video', public_id: name });
         return {
             video: result.public_id,
             videoUrl: result.secure_url
