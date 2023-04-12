@@ -10,6 +10,7 @@ export interface Action {
     action: string;
     sequence: string;
     video: string;
+    videoUrl: string;
     isArchived?: boolean;
     keypoints?: Keypoints[];
 }

@@ -6,10 +6,18 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-export const uploadVideo = async (fileBuffer: Buffer, name: string): Promise<string> => {
+interface Video {
+    video: string;
+    videoUrl: string;
+}
+
+export const uploadVideo = async (fileBuffer: Buffer, name: string): Promise<Video> => {
     try {
         const result = await cloudinary.v2.uploader.upload(`data:video/mp4;base64,${fileBuffer.toString('base64')}`, { resource_type: 'video', format: 'mp4', public_id: name });
-        return result.secure_url;
+        return {
+            video: result.public_id,
+            videoUrl: result.secure_url
+        };
     } catch (error) {
         throw new Error('Failed to upload video');
     }

@@ -34,9 +34,10 @@ const addAction = async (sign: Action, file: Buffer) => {
 
         sign.sequence = `${sign.action}-${length}`
 
-        const videoUrl = await uploadVideo(file, sign.sequence);
+        const { video, videoUrl } = await uploadVideo(file, sign.sequence);
 
-        sign.video = videoUrl;
+        sign.video = video;
+        sign.videoUrl = videoUrl;
 
         const action = await ActionModel.create(sign);
 
