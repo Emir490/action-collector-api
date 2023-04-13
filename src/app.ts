@@ -7,7 +7,7 @@ import db from "./config/mongo";
 const app = express();
 
 const corsOptions = {
-    origin: 'https://action-collector.vercel.app',
+    origin: process.env.WEB_URL,
     optionsSuccessStatus: 200
 }
 
