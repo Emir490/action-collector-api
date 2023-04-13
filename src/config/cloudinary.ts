@@ -6,19 +6,12 @@ cloudinary.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-interface Video {
-    video: string;
-    videoUrl: string;
-}
-
-export const uploadVideo = async (fileBuffer: Buffer, name: string): Promise<Video> => {
+export const uploadVideo = async (file: Express.Multer.File, name: string): Promise<string | null> => {
     try {
-        const result = await cloudinary.v2.uploader.upload(`data:video/mp4;base64,${fileBuffer.toString('base64')}`, { resource_type: 'video', public_id: name });
-        return {
-            video: result.public_id,
-            videoUrl: result.secure_url
-        };
+        const result = await cloudinary.v2.uploader.upload(file.path, { resource_type: 'video', public_id: name });
+        return result.secure_url
     } catch (error) {
-        throw new Error('Failed to upload video');
+        console.error(error);
+        return null;
     }
 }

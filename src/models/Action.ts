@@ -20,10 +20,6 @@ export const ActionSchema = new Schema<Action>(
             type: String,
             required: true
         },
-        videoUrl: {
-            type: String,
-            required: true
-        },
         isArchived: {
             type: Boolean,
             default: false

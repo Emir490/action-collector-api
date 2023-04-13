@@ -16,13 +16,14 @@ const index = async ({ params }: Request, res: Response) => {
 const postAction = async (req: Request, res: Response) => {
     try {
         const file = req.file;
+        
         req.body.keypoints = JSON.parse(req.body.keypoints);
 
         if (!file) {
             return res.status(400).json({ message: "Error uploading file" });
         }
 
-        const responseAction = await addAction(req.body, file.buffer);
+        const responseAction = await addAction(req.body, file);
         
         res.status(responseAction.status);
         res.send(responseAction.content);

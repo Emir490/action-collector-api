@@ -5,7 +5,14 @@ import { router } from "./routes";
 import db from "./config/mongo";
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+    origin: 'https://action-collector.vercel.app',
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
+app.use(express.static('public'));
 app.use(express.json({ limit: '1mb' }));
 app.use(router);
 

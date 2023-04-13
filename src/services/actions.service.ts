@@ -1,6 +1,9 @@
+import multer from "multer";
 import { uploadVideo } from "../config/cloudinary";
 import { Action } from "../interfaces/action.interface"
 import ActionModel from "../models/Action";
+import fs from 'fs';
+import path from "path"
 
 const getActions = async (action: string) => {
     try {
@@ -22,7 +25,7 @@ const getArchivedActions = async () => {
     }
 }
 
-const addAction = async (sign: Action, file: Buffer) => {
+const addAction = async (sign: Action, file: Express.Multer.File) => {
     try {
         const actionCount = await ActionModel.countDocuments({ action: sign.action, isArchived: false });
 
@@ -32,12 +35,29 @@ const addAction = async (sign: Action, file: Buffer) => {
 
         const length = actionCount + 1;
 
-        sign.sequence = `${sign.action}-${length}`
+        sign.sequence = `${sign.action}-${length}`;
 
-        const { video, videoUrl } = await uploadVideo(file, sign.sequence);
+        const video = await uploadVideo(file, sign.sequence);
+    
+        if (video) {
+            sign.video = video;
 
-        sign.video = video;
-        sign.videoUrl = videoUrl;
+            fs.unlink(file.path, (error) => {
+                if (error) {
+                    console.error(`Error deleting file: ${file.path}`);
+                }
+            });
+        } else {
+            const oldFilePath = path.join(__dirname, '..', '..', 'public', 'videos', file.filename);
+            const newFilePath = path.join(__dirname, '..', '..', 'public', 'videos', sign.sequence);
+
+            // Rename the file
+            fs.renameSync(oldFilePath, `${newFilePath}.webm`);
+
+            const video = `${process.env.BASE_URL}/videos/${sign.sequence}.webm`;
+
+            sign.video = video;
+        }
 
         const action = await ActionModel.create(sign);
 
